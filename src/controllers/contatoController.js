@@ -25,9 +25,9 @@ exports.register = async(req, res) => {
 };
 
 exports.editIndex = async function(req, res) {
-  if(!req.params.id) return res.render('404');
+  if(!req.params.id) return res.render('e404');
   const contato = await Contato.buscaPorId(req.params.id);
-  if(!contato) return res.render('404');
+  if(!contato) return res.render('e404');
 
   res.render('contato', { contato });
 };
@@ -51,4 +51,15 @@ exports.edit = async function(req, res) {
     console.log(e);
     res.render('e404');
   }
+};
+
+exports.delete = async function(req, res) {
+  if(!req.params.id) return res.render('e404');
+
+  const contato = await Contato.delete(req.params.id);
+  if(!contato) return res.render('e404');
+
+  req.flash('success', 'Contato apagado com sucesso.');
+  req.session.save(() => res.redirect('back'));
+  return;
 };
